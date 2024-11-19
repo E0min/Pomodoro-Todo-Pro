@@ -6,7 +6,7 @@ $navbar-hover-bg-color: #555;
 
 nav {
 border-radius: 5px;
-  width: $navbar-width; // 화면 가로 크기의 1/3
+  
   margin: 0 auto; // 좌우 여백을 동일하게 설정
   display: flex;
   justify-content: space-between;

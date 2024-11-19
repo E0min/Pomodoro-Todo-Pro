@@ -1,0 +1,56 @@
+@charset "UTF-8";
+.timer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.progress-ring {
+  position: relative;
+  transform: rotate(-90deg); /* 시계 방향으로 회전 */
+}
+
+.progress-ring__circle {
+  transition: stroke-dashoffset 0.35s; /* 부드러운 애니메이션 */
+  transform: rotate(0deg); /* 시작점을 위쪽으로 변경 */
+  transform-origin: center;
+}
+
+.timer-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.controls {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.controls button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.controls button:hover {
+  background-color: #ff4b4b;
+}
+
+.controls button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}/*# sourceMappingURL=PomodoroTimer.css.map */

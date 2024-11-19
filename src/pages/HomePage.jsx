@@ -1,14 +1,18 @@
 import { app } from "../firebase/firebaseConfig";
 import React, { useState, useEffect } from "react";
-
 import Navbar from "../components/Navbar"; // 올바른 파일 경로
+import PomodoroTimer from "../components/PomodoroTimer";
+
 const HomePage = () => {
   return (
-    <Navbar
+    <div
       style={{
         width: "100%",
       }}
-    ></Navbar>
+    >
+      <Navbar></Navbar>
+      <PomodoroTimer></PomodoroTimer>
+    </div>
   );
 };
 
