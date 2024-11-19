@@ -1,7 +1,7 @@
-import { app } from "../firebase/firebaseConfig";
+// import { app } from "../firebase/firebaseConfig";
 import React, { useState, useEffect } from "react";
-import Navbar from "../components/Navbar"; // 올바른 파일 경로
-import PomodoroTimer from "../components/PomodoroTimer";
+import Navbar from "../components/Navbar/Navbar"; // 올바른 파일 경로
+import PomodoroTimer from "../components/PomodoroTimer/PomodoroTimer";
 
 const HomePage = () => {
   return (
