@@ -1,30 +1,110 @@
+@charset "UTF-8";
 nav {
-  border-radius: 5px 5px 0px 0px;
+  border-radius: 5px 5px 0 0;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 10px;
-  color: #fff;
+  padding: 10px 20px;
   background-color: #333;
+  color: #fff;
+  gap: 10px;
 }
-nav li {
-  list-style: none;
+nav .Pomo-Todo {
   font-size: 24px;
   font-weight: bold;
   color: #ff6b6b;
+  cursor: pointer;
+  position: relative;
 }
-nav div {
+nav .Pomo-Todo::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 110%;
+  /* 버튼 아래에 툴팁 표시 */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #555;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translate(-50%, 10px);
+}
+nav .Pomo-Todo:hover::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+nav > div {
   display: flex;
+  align-items: center;
   gap: 20px;
 }
-nav div div {
+nav > div .rank,
+nav > div .report {
+  position: relative;
+  /* 부모 요소에 position 추가 */
   cursor: pointer;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
 }
-nav div div:hover {
+nav > div .rank::after,
+nav > div .report::after {
+  content: attr(data-tooltip);
+  /* 툴팁 내용 속성에서 가져옴 */
+  position: absolute;
+  top: 110%;
+  left: 50%;
+  transform: translateX(-50%);
   background-color: #555;
-  color: #ff6b6b;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translate(-50%, 10px);
+}
+nav > div .rank:hover::after,
+nav > div .report:hover::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+nav > div .profile {
+  position: relative;
+  /* 부모 요소에 position 추가 */
+  cursor: pointer;
+}
+nav > div .profile::after {
+  content: "로그아웃 하려면 클릭 하세요";
+  position: absolute;
+  top: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #555;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translate(-50%, 10px);
+}
+nav > div .profile:hover::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+nav > div img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  transition: border-color 0.3s ease;
 }/*# sourceMappingURL=Navbar.css.map */

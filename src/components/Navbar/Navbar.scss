@@ -1,41 +1,123 @@
-$navbar-width: 33.33%;
 $navbar-bg-color: #333;
 $navbar-text-color: #fff;
 $navbar-accent-color: #ff6b6b;
 $navbar-hover-bg-color: #555;
 
 nav {
-border-radius: 5px 5px 0px 0px;
-  
-  margin: 0 auto; // 좌우 여백을 동일하게 설정
+  border-radius: 5px 5px 0 0;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 10px;
+  padding: 10px 20px;
+  background-color: $navbar-bg-color;
   color: $navbar-text-color;
-  background-color: #333;
+  gap: 10px;
 
-  li {
-    list-style: none;
+  .Pomo-Todo {
     font-size: 24px;
     font-weight: bold;
     color: $navbar-accent-color;
+    cursor: pointer;
+    position: relative;
+
+    &::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      top: 110%;
+      /* 버튼 아래에 툴팁 표시 */
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: $navbar-hover-bg-color;
+      color: #fff;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      transform: translate(-50%, 10px);
+    }
+
+    &:hover::after {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
   }
 
-  div {
+  >div {
     display: flex;
+    align-items: center;
     gap: 20px;
 
-    div {
+    .rank,
+    .report {
+      position: relative;
+      /* 부모 요소에 position 추가 */
       cursor: pointer;
-      padding: 8px 12px;
-      border-radius: 4px;
-      transition: background-color 0.3s ease;
 
-      &:hover {
+      &::after {
+        content: attr(data-tooltip);
+        /* 툴팁 내용 속성에서 가져옴 */
+        position: absolute;
+        top: 110%;
+        left: 50%;
+        transform: translateX(-50%);
         background-color: $navbar-hover-bg-color;
-        color: $navbar-accent-color;
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        transform: translate(-50%, 10px);
       }
+
+      &:hover::after {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+    }
+    .profile{
+      position: relative;
+      /* 부모 요소에 position 추가 */
+      cursor: pointer;
+      &::after {
+        content: "로그아웃 하려면 클릭 하세요";
+        position: absolute;
+        top: 110%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: $navbar-hover-bg-color;
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        transform: translate(-50%, 10px);
+      }
+
+      &:hover::after {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+
+    }
+    img {
+      
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      transition: border-color 0.3s ease;
+
+      
     }
   }
 }

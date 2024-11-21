@@ -32,11 +32,7 @@ const PomodoroTimer = () => {
           alert("Time's up!");
         }
       }, 1000);
-    }
-  };
-
-  const stopTimer = () => {
-    if (isRunning) {
+    }else{
       setIsRunning(false);
       clearInterval(timerRef.current); // 타이머 중지
       const now = Date.now();
@@ -44,6 +40,7 @@ const PomodoroTimer = () => {
       remainingTimeRef.current = Math.max(remainingTimeRef.current - elapsed, 0); // 남은 시간 저장
     }
   };
+
 
   const resetTimer = () => {
     setIsRunning(false);
@@ -99,12 +96,10 @@ const PomodoroTimer = () => {
         )}`}</h2>
       </div>
       <div className="controls">
-        <button onClick={startTimer} disabled={isRunning}>
-          Start
+        <button onClick={startTimer} >
+        {isRunning ? "Stop" : "Start"}        
         </button>
-        <button onClick={stopTimer} disabled={!isRunning}>
-          Stop
-        </button>
+
         <button onClick={resetTimer}>Reset</button>
       </div>
     </div>
