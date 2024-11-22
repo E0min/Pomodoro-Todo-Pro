@@ -57,21 +57,27 @@ const PomodoroTimer = () => {
     }
   };
 
-  // Firestore 또는 로컬 스토리지에 오늘의 포모도 저장
   const savePomo = async () => {
     const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
-    if (user && user.email) {
+    const elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000 / 60); // 경과 시간 (분)
+    const cumulativeTimeKey = "cumulativeTime"; // Firestore 문서에서 누적 시간 키 이름
+  
+    if (user && user.email) { // 유저가 로그인 상태라면
       try {
-        // Firestore에 저장
         const docRef = doc(db, "pomodoros", user.email); // email 기반 문서
         const docSnap = await getDoc(docRef);
-
+  
         if (docSnap.exists()) {
+          const savedTime = docSnap.data()[cumulativeTimeKey] || 0; // Firestore에 저장된 누적 시간
           await updateDoc(docRef, {
-            [today]: (docSnap.data()[today] || 0) + 1, // 기존 값에 +1
+            [today]: (elapsed + savedTime) / 25, // 포모도로 수 계산
+            [cumulativeTimeKey]: elapsed + savedTime, // 누적 시간 업데이트
           });
         } else {
-          await setDoc(docRef, { [today]: 1 }); // 새 데이터 생성
+          await setDoc(docRef, {
+            [today]: elapsed / 25, // 첫 포모도로 수 저장
+            [cumulativeTimeKey]: elapsed, // 첫 누적 시간 저장
+          });
         }
       } catch (error) {
         console.error("Firestore 데이터 저장 실패:", error);
@@ -80,21 +86,23 @@ const PomodoroTimer = () => {
       try {
         // 로컬 스토리지에 저장
         const localData = JSON.parse(localStorage.getItem("pomodoros")) || {};
-        localData[today] = (localData[today] || 0) + 1; // 기존 값에 +1
+        localData[today] = (localData[today] || 0) + elapsed / 25; // 포모도로 수 계산
         localStorage.setItem("pomodoros", JSON.stringify(localData));
       } catch (error) {
         console.error("로컬 스토리지 데이터 저장 실패:", error);
       }
     }
-
+  
     // UI 업데이트
-    setPomoCount((prev) => prev + 1);
+    setPomoCount((prev) => prev + elapsed / 25);
   };
+  
 
   const completeTimer = () => {
     if (isRunning) {
       clearInterval(timerRef.current);
       setIsRunning(false);
+      setTime(60*25);
       savePomo(); // Complete 버튼 클릭 시 저장
     }
   };

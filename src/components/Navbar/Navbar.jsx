@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -8,6 +9,7 @@ import {
 import { auth } from "../../firebase/firebaseConfig"; // Firebase 초기화 파일 경로에 맞게 설정
 import "./Navbar.css";
 const Navbar = () => {
+  const nav = useNavigate();
   const [user, setUser] = useState(null); // 로그인된 사용자 상태
   // 로그인 상태 감지
   useEffect(() => {
@@ -52,7 +54,7 @@ const Navbar = () => {
           <div className="rank" data-tooltip="랭크 확인하기">
             Rank
           </div>
-          <div className="report" data-tooltip="리포트 확인하기">
+          <div className="report"  onClick={()=>nav('/report')}data-tooltip="리포트 확인하기">
             Report
           </div>
 

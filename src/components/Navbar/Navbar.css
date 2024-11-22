@@ -51,7 +51,7 @@ nav > div .google-btn {
   text-align: center;
   cursor: pointer;
   position: relative;
-  font-size: 20px;
+  font-size: 1em;
   font-weight: bold;
   transition: background-color 0.3s ease;
 }
