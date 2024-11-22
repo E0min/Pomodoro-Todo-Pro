@@ -1,6 +1,10 @@
-
 import React, { useEffect, useState } from "react";
-import { GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged,
+} from "firebase/auth";
 import { auth } from "../../firebase/firebaseConfig"; // Firebase 초기화 파일 경로에 맞게 설정
 import "./Navbar.css";
 const Navbar = () => {
@@ -36,11 +40,21 @@ const Navbar = () => {
   return (
     <>
       <nav>
-        <div className="Pomo-Todo" data-tooltip="메인 화면으로 이동" onClick={() => nav('/')}>Pomo-todo</div>
+        <div
+          className="Pomo-Todo"
+          data-tooltip="메인 화면으로 이동"
+          onClick={() => nav("/")}
+        >
+          Pomo-todo
+        </div>
 
         <div>
-          <div className="rank" data-tooltip="랭크 확인하기">Rank</div>
-          <div className="report" data-tooltip="리포트 확인하기">Report</div>
+          <div className="rank" data-tooltip="랭크 확인하기">
+            Rank
+          </div>
+          <div className="report" data-tooltip="리포트 확인하기">
+            Report
+          </div>
 
           {user ? (
             <div className="profile">
@@ -56,9 +70,14 @@ const Navbar = () => {
                 }}
               />
             </div>
-
           ) : (
-            <button onClick={handleLogin}>Google로 계속하기</button>
+            <div
+              className="google-btn"
+              data-tooltip="로그인 하려면 클릭"
+              onClick={handleLogin}
+            >
+              Google로 계속하기
+            </div>
           )}
         </div>
       </nav>

@@ -21,7 +21,6 @@ nav .Pomo-Todo::after {
   content: attr(data-tooltip);
   position: absolute;
   top: 110%;
-  /* 버튼 아래에 툴팁 표시 */
   left: 50%;
   transform: translateX(-50%);
   background-color: #555;
@@ -33,7 +32,6 @@ nav .Pomo-Todo::after {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
-  transform: translate(-50%, 10px);
 }
 nav .Pomo-Todo:hover::after {
   opacity: 1;
@@ -45,15 +43,22 @@ nav > div {
   gap: 20px;
 }
 nav > div .rank,
-nav > div .report {
-  position: relative;
-  /* 부모 요소에 position 추가 */
+nav > div .report,
+nav > div .google-btn {
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  text-align: center;
   cursor: pointer;
+  position: relative;
+  font-size: 20px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 nav > div .rank::after,
-nav > div .report::after {
+nav > div .report::after,
+nav > div .google-btn::after {
   content: attr(data-tooltip);
-  /* 툴팁 내용 속성에서 가져옴 */
   position: absolute;
   top: 110%;
   left: 50%;
@@ -67,20 +72,24 @@ nav > div .report::after {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
-  transform: translate(-50%, 10px);
+}
+nav > div .rank:hover,
+nav > div .report:hover,
+nav > div .google-btn:hover {
+  background-color: #6f6f6f;
 }
 nav > div .rank:hover::after,
-nav > div .report:hover::after {
+nav > div .report:hover::after,
+nav > div .google-btn:hover::after {
   opacity: 1;
   transform: translate(-50%, 0);
 }
 nav > div .profile {
-  position: relative;
-  /* 부모 요소에 position 추가 */
   cursor: pointer;
+  position: relative;
 }
 nav > div .profile::after {
-  content: "로그아웃 하려면 클릭 하세요";
+  content: "로그아웃 하려면 클릭하세요";
   position: absolute;
   top: 110%;
   left: 50%;
@@ -94,13 +103,12 @@ nav > div .profile::after {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
-  transform: translate(-50%, 10px);
 }
 nav > div .profile:hover::after {
   opacity: 1;
   transform: translate(-50%, 0);
 }
-nav > div img {
+nav > div .profile img {
   width: 40px;
   height: 40px;
   border-radius: 50%;

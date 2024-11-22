@@ -25,7 +25,6 @@ nav {
       content: attr(data-tooltip);
       position: absolute;
       top: 110%;
-      /* 버튼 아래에 툴팁 표시 */
       left: 50%;
       transform: translateX(-50%);
       background-color: $navbar-hover-bg-color;
@@ -37,7 +36,6 @@ nav {
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.3s ease, transform 0.3s ease;
-      transform: translate(-50%, 10px);
     }
 
     &:hover::after {
@@ -46,20 +44,27 @@ nav {
     }
   }
 
-  >div {
+  > div {
     display: flex;
     align-items: center;
     gap: 20px;
 
+    // 공통 스타일 지정
     .rank,
-    .report {
-      position: relative;
-      /* 부모 요소에 position 추가 */
+    .report,
+    .google-btn {
+      color: $navbar-text-color;
+      padding: 10px 15px;
+      border-radius: 5px;
+      text-align: center;
       cursor: pointer;
+      position: relative;
+      font-size: 20px; // 공통 텍스트 크기 지정
+      font-weight: bold;
+      transition: background-color 0.3s ease;
 
       &::after {
         content: attr(data-tooltip);
-        /* 툴팁 내용 속성에서 가져옴 */
         position: absolute;
         top: 110%;
         left: 50%;
@@ -73,7 +78,10 @@ nav {
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.3s ease, transform 0.3s ease;
-        transform: translate(-50%, 10px);
+      }
+
+      &:hover {
+        background-color: lighten($navbar-hover-bg-color, 10%);
       }
 
       &:hover::after {
@@ -81,12 +89,13 @@ nav {
         transform: translate(-50%, 0);
       }
     }
-    .profile{
-      position: relative;
-      /* 부모 요소에 position 추가 */
+
+    .profile {
       cursor: pointer;
+      position: relative;
+
       &::after {
-        content: "로그아웃 하려면 클릭 하세요";
+        content: "로그아웃 하려면 클릭하세요";
         position: absolute;
         top: 110%;
         left: 50%;
@@ -100,7 +109,6 @@ nav {
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.3s ease, transform 0.3s ease;
-        transform: translate(-50%, 10px);
       }
 
       &:hover::after {
@@ -108,16 +116,13 @@ nav {
         transform: translate(-50%, 0);
       }
 
-    }
-    img {
-      
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-      transition: border-color 0.3s ease;
-
-      
+      img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        transition: border-color 0.3s ease;
+      }
     }
   }
 }
