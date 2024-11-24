@@ -57,16 +57,16 @@ const PomodoroTimer = () => {
     }
   };
 
-  const savePomo = async () => {
+  const savePomo = async (elapsed) => {
     const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
-    const elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000 / 60); // 경과 시간 (분)
     const cumulativeTimeKey = "cumulativeTime"; // Firestore 문서에서 누적 시간 키 이름
-  
-    if (user && user.email) { // 유저가 로그인 상태라면
+
+    if (user && user.email) {
+      // 유저가 로그인 상태라면
       try {
         const docRef = doc(db, "pomodoros", user.email); // email 기반 문서
         const docSnap = await getDoc(docRef);
-  
+
         if (docSnap.exists()) {
           const savedTime = docSnap.data()[cumulativeTimeKey] || 0; // Firestore에 저장된 누적 시간
           await updateDoc(docRef, {
@@ -92,18 +92,17 @@ const PomodoroTimer = () => {
         console.error("로컬 스토리지 데이터 저장 실패:", error);
       }
     }
-  
+
     // UI 업데이트
     setPomoCount((prev) => prev + elapsed / 25);
   };
-  
 
   const completeTimer = () => {
     if (isRunning) {
       clearInterval(timerRef.current);
       setIsRunning(false);
-      setTime(60*25);
-      savePomo(); // Complete 버튼 클릭 시 저장
+      setTime(60 * 25);
+      savePomo(25); // Complete 버튼 클릭 시 저장
     }
   };
 
@@ -127,6 +126,7 @@ const PomodoroTimer = () => {
         if (remaining <= 0) {
           clearInterval(timerRef.current);
           setIsRunning(false);
+          savePomo(elapsed);
           alert("Time's up!");
         }
       }, 1000);
@@ -149,17 +149,15 @@ const PomodoroTimer = () => {
     remainingTimeRef.current = totalTime;
   };
 
-  // 타이머 진행률 계산 (0 ~ 1)
-  const progress = time / totalTime;
-
   // 부채꼴 경로 계산
-  const calculateArc = (progress) => {
+  const calculateArc = () => {
     const radius = 130; // 반지름
     const centerX = 130; // 원 중심 X 좌표
     const centerY = 130; // 원 중심 Y 좌표
     const startAngle = -90; // 부채꼴 시작 각도 (12시 방향)
-    const endAngle = 60; // 고정된 끝 각도
-
+    const elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000); // 현재까지 경과 시간
+    const endAngle = 60 - 0.1 * elapsed; // 고정된 끝 각도
+    console.log(endAngle);
     // 각도를 라디안으로 변환
     const radian = (angle) => (angle * Math.PI) / 180;
 
@@ -187,7 +185,7 @@ const PomodoroTimer = () => {
     <div className="timer-container">
       <svg width="260" height="260">
         {/* 부채꼴 */}
-        <path d={calculateArc(progress)} fill="#ff6b6b" stroke="none" />
+        <path d={calculateArc()} fill="#ff6b6b" stroke="none" />
       </svg>
       <div className="timer-text">
         <h2>{`${Math.floor(time / 60)}:${String(time % 60).padStart(
@@ -196,7 +194,7 @@ const PomodoroTimer = () => {
         )}`}</h2>
       </div>
       <div className="controls">
-        <button onClick={startTimer}>{isRunning ? "Stop" : "Start"}</button>
+        <button onClick={startTimer}>{isRunning ? "Pause" : "Start"}</button>
         {isRunning && (
           <button className="complete-btn" onClick={completeTimer}>
             Complete
