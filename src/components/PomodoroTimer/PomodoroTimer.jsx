@@ -9,7 +9,8 @@ const PomodoroTimer = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [user, setUser] = useState(null); // 사용자 정보
   const [pomoCount, setPomoCount] = useState(0); // 오늘의 포모도 수
-  const timerRef = useRef(null);
+  const timerRef = useRef(null); //타이머의 ID값을 저장
+  const [isModalOpen, setIsmodalOpen] = useState(false);
   const startTimeRef = useRef(null);
   const remainingTimeRef = useRef(25 * 60);
   const totalTime = 25 * 60;
@@ -27,7 +28,7 @@ const PomodoroTimer = () => {
     return () => unsubscribe();
   }, []);
 
-  // Firestore에서 오늘의 포모도 가져오기
+  // Firestore에서 오늘의 타이머 데이터 불러오기
   const fetchFirestorePomo = async (email) => {
     try {
       const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
@@ -35,9 +36,10 @@ const PomodoroTimer = () => {
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists() && docSnap.data()[today]) {
-        setPomoCount(docSnap.data()[today]);
+        const elapsedSeconds = docSnap.data()[today]; // Firestore에 저장된 초 단위 데이터
+        setPomoCount(elapsedSeconds / 1500); // 1500초 = 25분
       } else {
-        setPomoCount(0);
+        setPomoCount(0); // 오늘 데이터가 없으면 0
       }
     } catch (error) {
       console.error("Firestore 데이터 로드 실패:", error);
@@ -45,48 +47,48 @@ const PomodoroTimer = () => {
     }
   };
 
-  // 로컬 스토리지에서 오늘의 포모도 가져오기
+  // 로컬 스토리지에서 오늘의 타이머 데이터 불러오기
   const fetchLocalStoragePomo = () => {
     try {
       const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
       const localData = JSON.parse(localStorage.getItem("pomodoros")) || {};
-      setPomoCount(localData[today] || 0); // 오늘 데이터가 없으면 0
+      const elapsedSeconds = localData[today] || 0;
+      setPomoCount(elapsedSeconds / 1500); // 1500초 = 25분
     } catch (error) {
       console.error("로컬 스토리지 데이터 로드 실패:", error);
       setPomoCount(0); // 실패 시 기본값 설정
     }
   };
 
+  // 타이머 완료 시 데이터 저장
   const savePomo = async (elapsed) => {
+    // 현재 흘러간 시간을 인자로 받아서 저장
     const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
-    const cumulativeTimeKey = "cumulativeTime"; // Firestore 문서에서 누적 시간 키 이름
 
     if (user && user.email) {
-      // 유저가 로그인 상태라면
+      // Firestore에 저장
       try {
         const docRef = doc(db, "pomodoros", user.email); // email 기반 문서
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          const savedTime = docSnap.data()[cumulativeTimeKey] || 0; // Firestore에 저장된 누적 시간
+          const savedTime = docSnap.data()[today] || 0; // Firestore에 저장된 누적 시간
           await updateDoc(docRef, {
-            [today]: (elapsed + savedTime) / 25, // 포모도로 수 계산
-            [cumulativeTimeKey]: elapsed + savedTime, // 누적 시간 업데이트
+            [today]: elapsed + savedTime, // 초 단위 누적 저장
           });
         } else {
           await setDoc(docRef, {
-            [today]: elapsed / 25, // 첫 포모도로 수 저장
-            [cumulativeTimeKey]: elapsed, // 첫 누적 시간 저장
+            [today]: elapsed, // 첫 초 단위 데이터 저장
           });
         }
       } catch (error) {
         console.error("Firestore 데이터 저장 실패:", error);
       }
     } else {
+      // 로컬 스토리지에 저장
       try {
-        // 로컬 스토리지에 저장
         const localData = JSON.parse(localStorage.getItem("pomodoros")) || {};
-        localData[today] = (localData[today] || 0) + elapsed / 25; // 포모도로 수 계산
+        localData[today] = (localData[today] || 0) + elapsed; // 초 단위 누적 저장
         localStorage.setItem("pomodoros", JSON.stringify(localData));
       } catch (error) {
         console.error("로컬 스토리지 데이터 저장 실패:", error);
@@ -94,15 +96,19 @@ const PomodoroTimer = () => {
     }
 
     // UI 업데이트
-    setPomoCount((prev) => prev + elapsed / 25);
+    setPomoCount((prev) => prev + elapsed / 1500); // 1500초 = 25분
   };
 
+  // 타이머 완료 이벤트
   const completeTimer = () => {
+    const elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000); // 경과 시간 (초)
+
     if (isRunning) {
       clearInterval(timerRef.current);
       setIsRunning(false);
-      setTime(60 * 25);
-      savePomo(25); // Complete 버튼 클릭 시 저장
+      setTime(60 * 25); // 타이머 초기화
+      console.log(elapsed);
+      savePomo(elapsed); // 지나간 시간 삽입
     }
   };
 
@@ -126,7 +132,7 @@ const PomodoroTimer = () => {
         if (remaining <= 0) {
           clearInterval(timerRef.current);
           setIsRunning(false);
-          savePomo(elapsed);
+          savePomo(totalTime);
           alert("Time's up!");
         }
       }, 1000);
@@ -155,9 +161,16 @@ const PomodoroTimer = () => {
     const centerX = 130; // 원 중심 X 좌표
     const centerY = 130; // 원 중심 Y 좌표
     const startAngle = -90; // 부채꼴 시작 각도 (12시 방향)
-    const elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000); // 현재까지 경과 시간
-    const endAngle = 60 - 0.1 * elapsed; // 고정된 끝 각도
-    console.log(endAngle);
+
+    // 현재 시간 기반 경과 시간 계산
+    const elapsed =
+      startTimeRef.current !== null
+        ? Math.floor((Date.now() - startTimeRef.current) / 1000)
+        : 0; // 초기 렌더링 시 elapsed는 0
+
+    // 초기 endAngle은 60, 이후에는 동적으로 계산
+    const endAngle = elapsed === 0 ? 60 : 60 - 0.1 * elapsed;
+
     // 각도를 라디안으로 변환
     const radian = (angle) => (angle * Math.PI) / 180;
 
@@ -202,7 +215,7 @@ const PomodoroTimer = () => {
         )}
         <button onClick={resetTimer}>Reset</button>
       </div>
-      <h2>Today's Pomo: {pomoCount}</h2>
+      <h2>Today's Pomo: {Math.floor(pomoCount)}</h2>
     </div>
   );
 };
