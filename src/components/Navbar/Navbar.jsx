@@ -1,26 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-  onAuthStateChanged,
-} from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { auth } from "../../firebase/firebaseConfig";
+import { useAuth } from "../../context/AuthContext"; // AuthContext에서 useAuth 가져오기
 import "./Navbar.css";
 import PomoReport from "../PomoReport/PomoReport";
+import Rank from "../Rank/Rank";
 
 const Navbar = () => {
   const nav = useNavigate();
-  const [user, setUser] = useState(null);
+  const { currentUser } = useAuth(); // Context에서 로그인 상태 가져오기
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    });
-    return () => unsubscribe();
-  }, []);
+  const [isRankModalOpen,setIsRankModalOpen] = useState(false);
 
   const handleLogin = async () => {
     const provider = new GoogleAuthProvider();
@@ -34,7 +25,6 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      setUser(null);
     } catch (error) {
       console.error("로그아웃 실패:", error.message);
     }
@@ -52,22 +42,25 @@ const Navbar = () => {
         </div>
 
         <div>
-          <div className="rank" data-tooltip="랭크 확인하기">
+          <div className="rank" data-tooltip="랭크 확인하기" onClick={()=>isRankModalOpen===false?setIsRankModalOpen(true):setIsRankModalOpen(false)}>
             Rank
           </div>
+
+          {/* Report 버튼 */}
           <div
-            className="report"
-            onClick={() => setIsModalOpen(true)}
-            data-tooltip="리포트 확인하기"
+            className={`report ${!currentUser ? "disabled" : ""}`} // 비활성화 시 스타일 추가
+            onClick={currentUser ? () => setIsModalOpen(true) : undefined} // 조건부 클릭 이벤트
+            data-tooltip={!currentUser ? "로그인 후 이용 가능" : "리포트 확인하기"} // 툴팁 변경
           >
             Report
           </div>
 
-          {user ? (
+          {/* 로그인/로그아웃 */}
+          {currentUser ? (
             <div className="profile">
               <img
                 onClick={handleLogout}
-                src={user.photoURL}
+                src={currentUser.photoURL}
                 alt="프로필 사진"
                 style={{
                   width: "40px",
@@ -88,7 +81,10 @@ const Navbar = () => {
           )}
         </div>
       </nav>
+
       {isModalOpen && <PomoReport onClose={() => setIsModalOpen(false)} />}
+      {isRankModalOpen && <Rank onClose={() => setIsRankModalOpen(false)} />}
+
     </>
   );
 };

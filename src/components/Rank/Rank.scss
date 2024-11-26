@@ -1,0 +1,53 @@
+/* src/components/Rank.scss */
+
+.rank-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+
+  h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .rank-table {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    border-collapse: collapse;
+
+    th,
+    td {
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+
+    th {
+      background-color: #ff6b6b;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:hover {
+      background-color: #eaeaea;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .rank-table {
+      width: 100%;
+      font-size: 14px;
+
+      th,
+      td {
+        padding: 8px 10px;
+      }
+    }
+  }
+}
