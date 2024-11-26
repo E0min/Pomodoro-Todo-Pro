@@ -10,7 +10,6 @@ const PomoReport = ({ onClose }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [pomodoroData, setPomodoroData] = useState({});
   const [loading, setLoading] = useState(true);
-  const totalData = useRef();
   const { currentUser } = useAuth(); // Context에서 로그인 상태 가져오기
 
   useEffect(() => {
@@ -180,7 +179,6 @@ const PomoReport = ({ onClose }) => {
               })}
             </div>
             {/* 누적 공부 시간 표시 */}
-
           </div>
         )}
       </div>

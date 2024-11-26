@@ -11,7 +11,7 @@ const Navbar = () => {
   const nav = useNavigate();
   const { currentUser } = useAuth(); // Context에서 로그인 상태 가져오기
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isRankModalOpen,setIsRankModalOpen] = useState(false);
+  const [isRankModalOpen, setIsRankModalOpen] = useState(false);
 
   const handleLogin = async () => {
     const provider = new GoogleAuthProvider();
@@ -34,15 +34,23 @@ const Navbar = () => {
     <>
       <nav>
         <div
-          className="Pomo-Todo"
+          className="Pomodoro"
           data-tooltip="메인 화면으로 이동"
           onClick={() => nav("/")}
         >
-          Pomo-todo
+          Pomodoro
         </div>
 
         <div>
-          <div className="rank" data-tooltip="랭크 확인하기" onClick={()=>isRankModalOpen===false?setIsRankModalOpen(true):setIsRankModalOpen(false)}>
+          <div
+            className="rank"
+            data-tooltip="랭크 확인하기"
+            onClick={() =>
+              isRankModalOpen === false
+                ? setIsRankModalOpen(true)
+                : setIsRankModalOpen(false)
+            }
+          >
             Rank
           </div>
 
@@ -50,7 +58,9 @@ const Navbar = () => {
           <div
             className={`report ${!currentUser ? "disabled" : ""}`} // 비활성화 시 스타일 추가
             onClick={currentUser ? () => setIsModalOpen(true) : undefined} // 조건부 클릭 이벤트
-            data-tooltip={!currentUser ? "로그인 후 이용 가능" : "리포트 확인하기"} // 툴팁 변경
+            data-tooltip={
+              !currentUser ? "로그인 후 이용 가능" : "리포트 확인하기"
+            } // 툴팁 변경
           >
             Report
           </div>
@@ -84,7 +94,6 @@ const Navbar = () => {
 
       {isModalOpen && <PomoReport onClose={() => setIsModalOpen(false)} />}
       {isRankModalOpen && <Rank onClose={() => setIsRankModalOpen(false)} />}
-
     </>
   );
 };

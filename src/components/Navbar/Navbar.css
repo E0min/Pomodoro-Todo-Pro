@@ -10,14 +10,14 @@ nav {
   color: #fff;
   gap: 10px;
 }
-nav .Pomo-Todo {
+nav .Pomodoro {
   font-size: 24px;
   font-weight: bold;
   color: #ff6b6b;
   cursor: pointer;
   position: relative;
 }
-nav .Pomo-Todo::after {
+nav .Pomodoro::after {
   content: attr(data-tooltip);
   position: absolute;
   top: 110%;
@@ -33,7 +33,7 @@ nav .Pomo-Todo::after {
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
-nav .Pomo-Todo:hover::after {
+nav .Pomodoro:hover::after {
   opacity: 1;
   transform: translate(-50%, 0);
 }
