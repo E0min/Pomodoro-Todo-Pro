@@ -10,7 +10,6 @@ const PomodoroTimer = () => {
   const [user, setUser] = useState(null); // 사용자 정보
   const [pomoCount, setPomoCount] = useState(0); // 오늘의 포모도 수
   const timerRef = useRef(null); //타이머의 ID값을 저장
-  const [isModalOpen, setIsmodalOpen] = useState(false);
   const startTimeRef = useRef(null);
   const remainingTimeRef = useRef(25 * 60);
   const totalTime = 25 * 60;

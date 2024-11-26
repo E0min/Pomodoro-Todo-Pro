@@ -6,20 +6,22 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { auth } from "../../firebase/firebaseConfig"; // Firebase 초기화 파일 경로에 맞게 설정
+import { auth } from "../../firebase/firebaseConfig";
 import "./Navbar.css";
+import PomoReport from "../PomoReport/PomoReport";
+
 const Navbar = () => {
   const nav = useNavigate();
-  const [user, setUser] = useState(null); // 로그인된 사용자 상태
-  // 로그인 상태 감지
+  const [user, setUser] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser); // 로그인된 사용자 정보 설정
+      setUser(currentUser);
     });
-    return () => unsubscribe(); // 컴포넌트 언마운트 시 리스너 제거
+    return () => unsubscribe();
   }, []);
 
-  // Google 로그인
   const handleLogin = async () => {
     const provider = new GoogleAuthProvider();
     try {
@@ -29,11 +31,10 @@ const Navbar = () => {
     }
   };
 
-  // 로그아웃
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      setUser(null); // 사용자 상태 초기화
+      setUser(null);
     } catch (error) {
       console.error("로그아웃 실패:", error.message);
     }
@@ -54,7 +55,11 @@ const Navbar = () => {
           <div className="rank" data-tooltip="랭크 확인하기">
             Rank
           </div>
-          <div className="report"  onClick={()=>nav('/report')}data-tooltip="리포트 확인하기">
+          <div
+            className="report"
+            onClick={() => setIsModalOpen(true)}
+            data-tooltip="리포트 확인하기"
+          >
             Report
           </div>
 
@@ -83,6 +88,7 @@ const Navbar = () => {
           )}
         </div>
       </nav>
+      {isModalOpen && <PomoReport onClose={() => setIsModalOpen(false)} />}
     </>
   );
 };
