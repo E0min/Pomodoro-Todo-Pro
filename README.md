@@ -1,8 +1,61 @@
-# React + Vite
+# 프로젝트 이름  
+Pomodoro Timer & Study Rank Tracker  
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 프로젝트 설명  
+이 프로젝트는 Pomodoro 타이머를 활용한 생산성 관리와 사용자 간의 공부 시간을 비교할 수 있는 랭킹 시스템을 포함한 웹 애플리케이션입니다. Firebase를 백엔드로 사용하여 데이터를 실시간으로 저장 및 관리하며, React와 SCSS를 활용한 직관적이고 반응형 UI를 제공합니다.  
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 프로젝트의 특징  
+### 1. 핵심 기능  
+- **Pomodoro 타이머**:  
+  25분 동안 집중하여 작업하고, 자동으로 기록을 저장하는 타이머 기능 제공.  
+- **사용자 랭킹 시스템**:  
+  Firebase를 통해 사용자의 공부 시간을 저장하고, 이번 달 데이터를 기준으로 순위를 매김.  
+- **모달 인터페이스**:  
+  타이머와 랭킹 페이지가 각각 모달 창으로 제공되어 직관적인 사용 경험을 제공.  
+
+### 2. 기술적 특징  
+- **React.js**: 컴포넌트 기반 구조로 유지보수가 용이.  
+- **Firebase**:  
+  - Authentication: 사용자 로그인 및 인증 처리.  
+  - Firestore: 공부 시간 데이터를 실시간으로 저장 및 가져옴.  
+- **SCSS**: 가독성 높은 스타일링과 반응형 UI를 구현.  
+
+---
+
+## 기술 선택 이유  
+- **React.js**:  
+  컴포넌트 재사용성과 상태 관리가 용이하여 빠른 UI 개발 가능.  
+- **Firebase**:  
+  - 데이터 실시간 동기화와 간편한 인증 처리.  
+  - 서버를 별도로 설정하지 않아도 되는 간결한 백엔드 솔루션.  
+- **SCSS**:  
+  변수와 중첩 구조를 사용해 CSS를 효율적으로 관리할 수 있음.  
+
+---
+
+## 사용 예시  
+### 1. 설계 문서  
+- **타이머 기능 플로우**:  
+  - 사용자가 타이머 시작 → 종료 시 Firebase에 기록 저장.  
+  - Firebase 데이터를 기준으로 순위 생성.  
+
+- **데이터 구조**:  
+  ```json
+  {
+    "user@example.com": {
+      "2024-11-01": 1500,
+      "2024-11-02": 1800,
+      ...
+    }
+  }
+  ```  
+
+## 배포 링크
+![배포 링크](https://pomodoro-todo-pro.vercel.app/)
+
+---
+
+## 라이선스  
+[MIT License](LICENSE)  
